@@ -1,7 +1,8 @@
 using UnityEngine;
 
 public class Map : MonoBehaviour
-{    
+{
+    public Tile[,] Tiles => _tiles;
     public Vector2Int Size => _size;
 
     [SerializeField] 

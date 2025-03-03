@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    public bool IsObstacle => _isObstacle;
+    
     [SerializeField]
     private Color _allowingColor;
     [SerializeField]
     private Color _forbiddingColor;
+    [SerializeField] 
+    private bool _isObstacle;
     
     private List<Material> _materials = new();
 

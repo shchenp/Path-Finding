@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _allowingColor: {r: 0.47058824, g: 0.6901961, b: 0.49019608, a: 0.3529412}
   _forbiddingColor: {r: 0.6862745, g: 0.3137255, b: 0.3137255, a: 0}
-  _surface: {fileID: 0}
+  _isObstacle: 0
 --- !u!1001 &2502616944976114606
 PrefabInstance:
   m_ObjectHideFlags: 0
