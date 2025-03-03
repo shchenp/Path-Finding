@@ -17,9 +17,7 @@ public class Map : MonoBehaviour
     public bool IsCellAvailable(Vector2Int index)
     {
         // Если индекс за пределами сетки - возвращаем false
-        var isOutOfGrid = index.x < 0 || index.y < 0 || 
-                          index.x >= _tiles.GetLength(0) || index.y >= _tiles.GetLength(1);
-        if (isOutOfGrid)
+        if (IsOutOfGrid(index))
         {
             return false;
         }
@@ -32,5 +30,11 @@ public class Map : MonoBehaviour
     public void SetTile(Vector2Int index, Tile tile)
     {
         _tiles[index.x, index.y] = tile;
+    }
+
+    private bool IsOutOfGrid(Vector2Int index)
+    {
+        return index.x < 0 || index.y < 0 ||
+               index.x >= _tiles.GetLength(0) || index.y >= _tiles.GetLength(1);
     }
 }
