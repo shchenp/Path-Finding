@@ -19,29 +19,21 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void SetColor(bool available)
+    public void SetColor(bool isAvailable)
     {
-        if (available)
-        {
-            foreach (var material in _materials)
-            {
-                material.color = _allowingColor;
-            }
-        }
-        else
-        {
-            foreach (var material in _materials)
-            {
-                material.color = _forbiddingColor;
-            }
-        }
+        SetColor(isAvailable ? _allowingColor : _forbiddingColor);
     }
 
     public void ResetColor()
     {
+        SetColor(Color.white);
+    }
+
+    private void SetColor(Color color)
+    {
         foreach (var material in _materials)
         {
-            material.color = Color.white;
+            material.color = color;
         }
     }
 }
