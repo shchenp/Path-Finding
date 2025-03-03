@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1216414579862036432}
   - component: {fileID: -9210445661614028194}
   - component: {fileID: -5770717306889206720}
+  - component: {fileID: 3001089497591477403}
   m_Layer: 0
   m_Name: SimpleTile
   m_TagString: Untagged
@@ -69,6 +70,19 @@ MonoBehaviour:
   m_Area: 0
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
+--- !u!65 &3001089497591477403
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976523354156320879}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.2, y: 2.2, z: 2.2}
+  m_Center: {x: 0, y: 1.09, z: 0}
 --- !u!1001 &2502616944976114606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -161,6 +175,14 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1216414579862036432}
     m_Modifications:
+    - target: {fileID: -3281812277924531262, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
+      propertyPath: m_Size.x
+      value: 1.9
+      objectReference: {fileID: 0}
+    - target: {fileID: -3281812277924531262, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
+      propertyPath: m_Size.z
+      value: 1.9
+      objectReference: {fileID: 0}
     - target: {fileID: -3281812277924531262, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
       propertyPath: m_Enabled
       value: 1
