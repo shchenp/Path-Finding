@@ -9,6 +9,10 @@ public class Tile : MonoBehaviour
     private Color _allowingColor;
     [SerializeField]
     private Color _forbiddingColor;
+    [SerializeField]
+    private Color _highlightingColor;
+    [SerializeField] 
+    private MeshRenderer _tileTopRenderer;
     [SerializeField] 
     private bool _isObstacle;
     
@@ -21,6 +25,16 @@ public class Tile : MonoBehaviour
         {
             _materials.Add(meshRenderer.material);
         }
+    }
+
+    public void HighlightFinalPoint()
+    {
+        _tileTopRenderer.material.color = _highlightingColor;
+    }
+
+    public void HighlightOnPath()
+    {
+        _tileTopRenderer.material.color = _allowingColor;
     }
 
     public void SetColor(bool isAvailable)

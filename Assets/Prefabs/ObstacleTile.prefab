@@ -53,6 +53,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _allowingColor: {r: 0.4703809, g: 0.6886792, b: 0.49092662, a: 0.3529412}
   _forbiddingColor: {r: 0.6862745, g: 0.3137255, b: 0.3137255, a: 0}
+  _highlightingColor: {r: 0.5803922, g: 0.79215693, b: 0.12941177, a: 0}
+  _tileTopRenderer: {fileID: 8257961329290110096}
   _isObstacle: 1
 --- !u!1001 &5439380195622194131
 PrefabInstance:
@@ -128,6 +130,11 @@ PrefabInstance:
 --- !u!4 &972938788951783173 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5114996075067899094, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
+  m_PrefabInstance: {fileID: 5439380195622194131}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8257961329290110096 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4172201787302145859, guid: 3d3e1647da524af438765070d6d4fc6c, type: 3}
   m_PrefabInstance: {fileID: 5439380195622194131}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5439380195799257830
