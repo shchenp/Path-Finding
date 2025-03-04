@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
@@ -9,26 +12,25 @@ public class PlayerController : MonoBehaviour
     private PathFinder _pathFinder;
     
     private static readonly int IsMoving = Animator.StringToHash("isMoving");
+    private bool _isMoving;
     private Animator _animator;
     private Camera _camera;
+    private Tile _currentTile;
 
-    private void Awake()
+    public void Initialize(Tile currentTile, Map map)
     {
+        _currentTile = currentTile;
+        _pathFinder.SetTiles(map);
+        
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
     }
 
-    // По умолчанию у персонажа проигрывается анимация покоя.
-    // Для того, чтобы запустить анимацию ходьбы - передавайте в параметр аниматора IsMoving значение true:
-    // _animator.SetBool(IsMoving, true);
-    // Для того, чтобы запустить анимацию покоя - передавайте в параметр аниматора IsMoving значение false:
-    // _animator.SetBool(IsMoving, false);
-
     private void Update()
     {
-        if (_navMeshAgent.remainingDistance <= 0)
+        if (_isMoving)
         {
-            _animator.SetBool(IsMoving, false);
+            return;
         }
 
         if (!Input.GetMouseButtonDown(0))
@@ -38,10 +40,54 @@ public class PlayerController : MonoBehaviour
         
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
         {
-            _pathFinder.FindPath(_navMeshAgent, hit.point);
+            List<Tile> path = null;
             
-            //_animator.SetBool(IsMoving, true);
-            //_navMeshAgent.SetDestination(hit.point);
+            if (hit.collider.TryGetComponent(out Tile endTile))
+            {
+                path = _pathFinder.FindPath(_currentTile, endTile);
+            }
+
+            if (path != null)
+            {
+                StartCoroutine(Move(path));
+            }
         }
+    }
+
+    private IEnumerator Move(List<Tile> path)
+    {
+        OnMoved(true);
+        
+        for (var i = 1; i < path.Count; i++)
+        {
+            var position = path[i].transform.position;
+            
+            position.y = transform.position.y;
+            _navMeshAgent.SetDestination(position);
+            
+            while (_navMeshAgent.pathPending || _navMeshAgent.remainingDistance > 0)
+            {
+                foreach (var tile in path)
+                {
+                    tile.HighlightOnPath();
+                }
+                
+                yield return null;
+            }
+        }
+
+        _currentTile = path.Last();
+        OnMoved(false);
+        
+        foreach (var tile in path)
+        {
+            tile.ResetColor();
+        }
+    }
+
+    private void OnMoved(bool isMoved)
+    {
+        _isMoving = isMoved;
+        _animator.SetBool(IsMoving, isMoved);
     }
 }

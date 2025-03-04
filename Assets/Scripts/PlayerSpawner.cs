@@ -16,7 +16,8 @@ public class PlayerSpawner : MonoBehaviour
                 var spawnPosition = tile.transform.position;
                 if (NavMesh.SamplePosition(spawnPosition, out var hit, 2.0f, NavMesh.AllAreas)) 
                 {
-                    Instantiate(_playerPrefab, hit.position, Quaternion.identity);
+                    var player = Instantiate(_playerPrefab, hit.position, Quaternion.identity);
+                    player.Initialize(tile, _map);
                 }
                 else 
                 {

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MapBuilder : MonoBehaviour
@@ -18,12 +17,9 @@ public class MapBuilder : MonoBehaviour
 
     public void StartPlacingTile(GameObject tilePrefab)
     {
+        ResetBuilder();
+        
         var tileObject = Instantiate(tilePrefab);
-
-        if (_currentTile != null)
-        {
-            Destroy(_currentTile.gameObject);
-        }
         
         _currentTile = tileObject.GetComponent<Tile>();
         _currentTile.transform.SetParent(_map.transform);
@@ -45,6 +41,7 @@ public class MapBuilder : MonoBehaviour
             var isAvailable = _map.IsCellAvailable(tileIndex);
             // Задаем тайлу соответствующий цвет
             _currentTile.SetColor(isAvailable);
+            _currentTile.SetIndex(tileIndex);
             
             // Если место недоступно для постройки - выходим из метода
             if (!isAvailable)
@@ -59,6 +56,14 @@ public class MapBuilder : MonoBehaviour
                 _currentTile.ResetColor();
                 _currentTile = null;
             }
+        }
+    }
+
+    public void ResetBuilder()
+    {
+        if (_currentTile != null)
+        {
+            Destroy(_currentTile.gameObject);
         }
     }
 }

@@ -3,6 +3,13 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    public int GCost = int.MaxValue;  // стоимость пути от старта до этого узла
+    public int HCost;                 // эвристическая оценка расстояния до цели
+    public int FCost => GCost + HCost;
+
+    public Tile Parent; // ссылка на родительский узел (для восстановления пути)
+    public Vector2Int Index { get; private set; }
+
     public bool IsObstacle => _isObstacle;
     
     [SerializeField]
@@ -25,6 +32,11 @@ public class Tile : MonoBehaviour
         {
             _materials.Add(meshRenderer.material);
         }
+    }
+
+    public void SetIndex(Vector2Int index)
+    {
+        Index = index;
     }
 
     public void HighlightFinalPoint()
@@ -52,6 +64,16 @@ public class Tile : MonoBehaviour
         foreach (var material in _materials)
         {
             material.color = color;
+        }
+    }
+
+    public void ResetPathData()
+    {
+        if (!_isObstacle)
+        {
+            GCost = int.MaxValue;
+            HCost = 0;
+            Parent = null;
         }
     }
 }
