@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class PathFinder : MonoBehaviour
+public class PathFinder
 {
     private int _width;
     private int _height;
     private Tile[,] _tiles;
 
-    public void SetTiles(Map map)
+    public PathFinder(Map map)
     {
         _tiles = map.Tiles;
         _height = _tiles.GetLength(0);

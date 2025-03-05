@@ -8,11 +8,10 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] 
     private NavMeshAgent _navMeshAgent;
-    [SerializeField]
-    private PathFinder _pathFinder;
     
     private static readonly int IsMoving = Animator.StringToHash("isMoving");
     private bool _isMoving;
+    private PathFinder _pathFinder;
     private Animator _animator;
     private Camera _camera;
     private Tile _currentTile;
@@ -20,8 +19,7 @@ public class PlayerController : MonoBehaviour
     public void Initialize(Tile currentTile, Map map)
     {
         _currentTile = currentTile;
-        _pathFinder.SetTiles(map);
-        
+        _pathFinder = new PathFinder(map);
         _animator = GetComponent<Animator>();
         _camera = Camera.main;
     }
