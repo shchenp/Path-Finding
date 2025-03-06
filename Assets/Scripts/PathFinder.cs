@@ -16,8 +16,7 @@ public class PathFinder
 
 
     /// <summary>
-    /// Находит кратчайший путь между точками start и target.
-    /// Параметры start и target задаются в виде координат (x, y).
+    /// Находит кратчайший путь между тайлами.
     /// Если путь найден, возвращает список узлов, иначе — null.
     /// </summary>
     public List<Tile> FindPath(Tile fromTile, Tile toTile)
