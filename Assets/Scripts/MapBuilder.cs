@@ -15,22 +15,30 @@ public class MapBuilder : MonoBehaviour
         _camera = Camera.main;
     }
 
-    public void StartPlacingTile(GameObject tilePrefab)
+    public void StartPlacingTile(Tile tilePrefab)
     {
         ResetBuilder();
         
-        var tileObject = Instantiate(tilePrefab);
-        
-        _currentTile = tileObject.GetComponent<Tile>();
-        _currentTile.transform.SetParent(_map.transform);
+        _currentTile = Instantiate(tilePrefab, _map.transform, true);
     }
 
     private void Update()
     {
+        if (!_currentTile)
+        {
+            return;
+        }
+        
+        UpdateTilePosition();
+        ProcessPlacementInput();
+    }
+
+    private void UpdateTilePosition()
+    {
         var mousePosition = Input.mousePosition;
         var ray = _camera.ScreenPointToRay(mousePosition);
 
-        if (Physics.Raycast(ray, out var hitInfo) && _currentTile != null) 
+        if (Physics.Raycast(ray, out var hitInfo))
         {
             // Получаем индекс и позицию тайла по позиции курсора
             var tileIndex = _mapIndexProvider.GetIndex(hitInfo.point);
@@ -42,22 +50,26 @@ public class MapBuilder : MonoBehaviour
             // Задаем тайлу соответствующий цвет
             _currentTile.SetColor(isAvailable);
             _currentTile.SetIndex(tileIndex);
-            
-            // Если место недоступно для постройки - выходим из метода
-            if (!isAvailable)
-            {
-                return;
-            }
-            
-            // Если нажата ЛКМ - устанавливаем тайл 
-            if (Input.GetMouseButtonDown(0))
-            {
-                _map.SetTile(tileIndex, _currentTile);
-                _currentTile.ResetColor();
-                _currentTile = null;
-            }
         }
     }
+
+    private void ProcessPlacementInput()
+    {
+        var isAvailable = _map.IsCellAvailable(_currentTile.Index);
+        
+        if (isAvailable && Input.GetMouseButtonDown(0))
+        {
+            SetTile(_currentTile.Index);
+        }
+    }
+
+    private void SetTile(Vector2Int tileIndex)
+    {
+        _map.SetTile(tileIndex, _currentTile);
+        _currentTile.ResetColor();
+        _currentTile = null;
+    }
+
 
     public void ResetBuilder()
     {

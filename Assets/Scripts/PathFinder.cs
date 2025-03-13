@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class PathFinder
 {
-    private int _width;
-    private int _height;
-    private Tile[,] _tiles;
+    private readonly Map _map;
+    private readonly Tile[,] _tiles;
 
     public PathFinder(Map map)
     {
-        _tiles = map.Tiles;
-        _height = _tiles.GetLength(0);
-        _width = _tiles.GetLength(1);
+        _map = map;
+        _tiles = _map.Tiles;
     }
 
 
@@ -104,7 +103,7 @@ public class PathFinder
     private int GetDistance(Tile a, Tile b)
     {
         return (int)(Math.Abs(a.transform.position.x - b.transform.position.x)
-                     + Math.Abs(a.transform.position.y - b.transform.position.y));
+                     + Math.Abs(a.transform.position.z - b.transform.position.z));
     }
 
     /// <summary>
@@ -115,24 +114,25 @@ public class PathFinder
         var neighbors = new List<Tile>();
 
         // Определяем возможные направления: вверх, вниз, вправо, влево
-        var directions = new int[,]
+        var directions = new []
         {
-            { 0, 1 },  // вверх
-            { 0, -1 }, // вниз
-            { 1, 0 },  // вправо
-            { -1, 0 }  // влево
+            new Vector2Int(0, 1),   // вверх
+            new Vector2Int(0, -1),  // вниз
+            new Vector2Int(1, 0),   // вправо
+            new Vector2Int(-1, 0)   // влево
         };
         
-        for (var i = 0; i < directions.GetLength(0); i++)
+        foreach (var direction in directions)
         {
-            var newX = node.Index.x + directions[i, 0];
-            var newY = node.Index.y + directions[i, 1];
+            var newIndex = node.Index + direction;
             
-            if (newX >= 0 && newX < _width && newY >= 0 && newY < _height)
+            if (!_map.IsOutOfGrid(newIndex))
             {
-                if (_tiles[newX, newY] != null)
+                var neighbor = _tiles[newIndex.x, newIndex.y];
+                
+                if (neighbor != null)
                 {
-                    neighbors.Add(_tiles[newX, newY]);
+                    neighbors.Add(neighbor);
                 }
             }
         }

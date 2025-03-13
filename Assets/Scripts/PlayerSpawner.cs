@@ -18,13 +18,9 @@ public class PlayerSpawner : MonoBehaviour
                 {
                     var player = Instantiate(_playerPrefab, hit.position, Quaternion.identity);
                     player.Initialize(tile, _map);
+                    
+                    return;
                 }
-                else 
-                {
-                    Debug.LogError("Не удалось найти подходящую точку на NavMesh!");
-                }
-                
-                return;
             }
         }
         

@@ -36,25 +36,28 @@ public class PlayerController : MonoBehaviour
             return;
         }
         
+        TryMoveToClickedTile();
+    }
+
+    private void TryMoveToClickedTile()
+    {
         if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
         {
-            List<Tile> path = null;
-            
             if (hit.collider.TryGetComponent(out Tile endTile))
             {
-                path = _pathFinder.FindPath(_currentTile, endTile);
-            }
+                var path = _pathFinder.FindPath(_currentTile, endTile);
 
-            if (path != null)
-            {
-                StartCoroutine(Move(path));
+                if (path != null)
+                {
+                    StartCoroutine(Move(path));
+                }
             }
         }
     }
 
     private IEnumerator Move(List<Tile> path)
     {
-        OnMoved(true);
+        SetMovingState(true);
         
         for (var i = 1; i < path.Count; i++)
         {
@@ -75,7 +78,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _currentTile = path.Last();
-        OnMoved(false);
+        SetMovingState(false);
         
         foreach (var tile in path)
         {
@@ -83,7 +86,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnMoved(bool isMoved)
+    private void SetMovingState(bool isMoved)
     {
         _isMoving = isMoved;
         _animator.SetBool(IsMoving, isMoved);
