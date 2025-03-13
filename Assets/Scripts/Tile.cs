@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IHighlightable
 {
     public int GCost = int.MaxValue;  // стоимость пути от старта до этого узла
     public int HCost;                 // эвристическая оценка расстояния до цели

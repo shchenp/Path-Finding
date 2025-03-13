@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HighlightController : MonoBehaviour
 {
     private Camera _camera;
-    private Tile _lastHighlightedTile;
-    private List<Tile> _path;
+    private IHighlightable _lastHighlightedTile;
+    private List<IHighlightable> _path;
 
     private void Awake()
     {
@@ -19,7 +20,7 @@ public class HighlightController : MonoBehaviour
 
         if (Physics.Raycast(ray, out var hitInfo))
         {
-            hitInfo.transform.TryGetComponent<Tile>(out var currentHighlightedTile);
+            hitInfo.transform.TryGetComponent<IHighlightable>(out var currentHighlightedTile);
 
             var isNewObject = currentHighlightedTile != _lastHighlightedTile;
             // Если это новый объект (не ранее подсвеченный)
@@ -44,11 +45,11 @@ public class HighlightController : MonoBehaviour
         }
     }
 
-    public void HighlightPath(List<Tile> path)
+    public void HighlightPath(IEnumerable<IHighlightable> path)
     {
-        _path = path;
+        _path = path.ToList();
         
-        foreach (var tile in path)
+        foreach (var tile in _path)
         {
             tile.HighlightOnPath();
         }
