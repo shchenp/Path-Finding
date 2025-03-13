@@ -1,32 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementSelector : MonoBehaviour
+public class HighlightController : MonoBehaviour
 {
-    private bool _isGameStarted;
     private Camera _camera;
     private Tile _lastHighlightedTile;
+    private List<Tile> _path;
 
     private void Awake()
     {
         _camera = Camera.main;
     }
 
-    public void SetGameState(bool isStarted)
-    {
-        _isGameStarted = isStarted;
-    }
-
-    private void Update()
-    {
-        if (!_isGameStarted)
-        {
-            return;
-        }
-
-        ProcessMouseHighlight();
-    }
-
-    private void ProcessMouseHighlight()
+    public void ProcessMouseHighlight()
     {
         var mousePosition = Input.mousePosition;
         var ray = _camera.ScreenPointToRay(mousePosition);
@@ -55,6 +41,24 @@ public class MovementSelector : MonoBehaviour
                 // Сохраняем текущий подсвечиваемый объект в поле
                 _lastHighlightedTile = currentHighlightedTile;
             }
+        }
+    }
+
+    public void HighlightPath(List<Tile> path)
+    {
+        _path = path;
+        
+        foreach (var tile in path)
+        {
+            tile.HighlightOnPath();
+        }
+    }
+
+    public void ResetPathHighlighting()
+    {
+        foreach (var tile in _path)
+        {
+            tile.ResetColor();
         }
     }
 }

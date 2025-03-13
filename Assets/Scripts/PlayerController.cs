@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,56 +7,22 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
+    public Action StopMoving;
+    public Tile PlayerPositionTile { get; private set; }
+
     [SerializeField] 
     private NavMeshAgent _navMeshAgent;
     
     private static readonly int IsMoving = Animator.StringToHash("isMoving");
-    private bool _isMoving;
-    private PathFinder _pathFinder;
     private Animator _animator;
-    private Camera _camera;
-    private Tile _currentTile;
 
-    public void Initialize(Tile currentTile, Map map)
+    public void Initialize(Tile currentTile)
     {
-        _currentTile = currentTile;
-        _pathFinder = new PathFinder(map);
+        PlayerPositionTile = currentTile;
         _animator = GetComponent<Animator>();
-        _camera = Camera.main;
     }
 
-    private void Update()
-    {
-        if (_isMoving)
-        {
-            return;
-        }
-
-        if (!Input.GetMouseButtonDown(0))
-        {
-            return;
-        }
-        
-        TryMoveToClickedTile();
-    }
-
-    private void TryMoveToClickedTile()
-    {
-        if (Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out var hit))
-        {
-            if (hit.collider.TryGetComponent(out Tile endTile))
-            {
-                var path = _pathFinder.FindPath(_currentTile, endTile);
-
-                if (path != null)
-                {
-                    StartCoroutine(Move(path));
-                }
-            }
-        }
-    }
-
-    private IEnumerator Move(List<Tile> path)
+    public IEnumerator Move(List<Tile> path)
     {
         SetMovingState(true);
         
@@ -68,27 +35,17 @@ public class PlayerController : MonoBehaviour
             
             while (_navMeshAgent.pathPending || _navMeshAgent.remainingDistance > 0)
             {
-                foreach (var tile in path)
-                {
-                    tile.HighlightOnPath();
-                }
-                
                 yield return null;
             }
         }
 
-        _currentTile = path.Last();
+        PlayerPositionTile = path.Last();
         SetMovingState(false);
-        
-        foreach (var tile in path)
-        {
-            tile.ResetColor();
-        }
+        StopMoving?.Invoke();
     }
 
     private void SetMovingState(bool isMoved)
     {
-        _isMoving = isMoved;
         _animator.SetBool(IsMoving, isMoved);
     }
 }

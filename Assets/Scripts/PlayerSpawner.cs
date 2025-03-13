@@ -6,7 +6,7 @@ public class PlayerSpawner : MonoBehaviour
     [SerializeField] private PlayerController _playerPrefab;
     [SerializeField] private Map _map;
 
-    public void Spawn()
+    public PlayerController Spawn()
     {
         var tiles = _map.Tiles;
         foreach (var tile in tiles)
@@ -17,13 +17,14 @@ public class PlayerSpawner : MonoBehaviour
                 if (NavMesh.SamplePosition(spawnPosition, out var hit, 2.0f, NavMesh.AllAreas)) 
                 {
                     var player = Instantiate(_playerPrefab, hit.position, Quaternion.identity);
-                    player.Initialize(tile, _map);
+                    player.Initialize(tile);
                     
-                    return;
+                    return player;
                 }
             }
         }
         
         Debug.Log("There are no one free tile");
+        return null;
     }
 }
